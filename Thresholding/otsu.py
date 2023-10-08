@@ -34,23 +34,3 @@ def otsu(img):
     Threshold = np.argmin(var_intra)
 
     return Threshold
-
-if "__main__" == __name__:
-    img = cv2.imread('img.jpg', cv2.IMREAD_GRAYSCALE)
-
-    Threshold = otsu(img)
-    print("Threshold: ", Threshold)
-
-    # Apply thresholding
-    img[img > Threshold] = 255
-    img[img <= Threshold] = 0
-
-    # Shpw the images original and thresholded
-    plt.figure(figsize=(10, 4))
-    plt.subplot(1, 2, 1)
-    plt.imshow(cv2.imread('img.jpg', cv2.IMREAD_GRAYSCALE), cmap='gray')
-    plt.title('Original')
-    plt.subplot(1, 2, 2)
-    plt.imshow(img, cmap='gray')
-    plt.title('Thresholded')
-    plt.show()
