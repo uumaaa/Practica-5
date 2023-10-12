@@ -124,6 +124,8 @@ class Kmeans_classifier:
             predictions.append(closest_cluster)
         
         return predictions
+    
+    
 
     def visualize_clusters(self):
         # Crea un objeto de ejes
@@ -165,6 +167,19 @@ class Kmeans_classifier:
         plt.show()
 
 
+    def calculate_wcss(data, k):
+        wcss_values = []
+        for i in range(1, k + 1):
+            kmeans = Kmeans_classifier(data, i)  # Elimina el argumento None
+            kmeans.fit()
+            wcss = 0
+            for j in range(len(data)):
+                cluster_index = kmeans.predict([data[j]])[0]
+                centroid = kmeans.centroids[cluster_index]
+                distance = Kmeans_classifier.euclidean_distance(data[j], centroid)  # Usa el método estático
+                wcss += distance ** 2
+            wcss_values.append(wcss)
+        return wcss_values
 
 
     @staticmethod
