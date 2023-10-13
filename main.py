@@ -1,4 +1,6 @@
 from Segmentation import k_means
+from Morphology import morph
+from Color import space_color
 import matplotlib.pyplot as plt
 
 import cv2 as cv
@@ -29,7 +31,11 @@ if __name__ == "__main__":
 
     #Se muestran las imágenes segmentadas
     cluster_images = kmeans.generate_cluster_images(img)
-
+    #Operaciones morfológicas a cada imagen
+    #conversion a blanco y negro
+    for i in range(7):
+        cluster_images[i] = cv.cvtColor(cluster_images[i], cv.COLOR_RGB2GRAY)
+    cluster_images[i] = morph.erosion(cluster_images[i],7,2)
     #Se muestran las imágenes segmentadas
     plt.figure(figsize=(10, 8))
     plt.subplot(2, 4, 1)
