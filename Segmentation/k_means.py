@@ -187,6 +187,39 @@ class Kmeans_classifier:
         # Calcular la distancia euclidiana entre dos puntos
         return math.sqrt(sum((x - y) ** 2 for x, y in zip(point1, point2)))
     
+    def generate_cluster_images(self, image):
+        cluster_images = []  # Lista para almacenar las imágenes de los clústeres
+
+        # Obtén los clústeres después de ajustar el modelo K-means
+        clusters = self.clusters
+
+        # Asigna un color específico a cada clúster
+        cluster_colors = []
+        for cluster in clusters:
+            if cluster:
+                cluster_data = np.array(cluster)
+                cluster_color = np.mean(cluster_data, axis=0).astype(int)
+                cluster_colors.append(cluster_color)
+            else:
+                # Si el clúster está vacío, usa un color negro
+                cluster_colors.append([0, 0, 0])
+
+        # Crea una imagen vacía con las mismas dimensiones que la imagen original
+        height, width, _ = image.shape
+        segmented_images = [np.zeros((height, width, 3), dtype=np.uint8) for _ in range(len(cluster_colors))]
+
+        # Recorre la imagen original y asigna el color correspondiente a cada píxel según su clúster
+        for i in range(height):
+            for j in range(width):
+                pixel = image[i, j]
+                cluster_index = self.predict([pixel])[0]
+                segmented_images[cluster_index][i, j] = cluster_colors[cluster_index]
+
+        # Agrega las imágenes de los clústeres a la lista
+        cluster_images = segmented_images
+
+        return cluster_images
+    
 
 def main():
     # Leer imagen
